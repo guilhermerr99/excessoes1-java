@@ -20,6 +20,7 @@ public class Program {
 		Date checkIn = sdf.parse(sc.next());
 		System.out.println("Data do check-out (dd/MM/yyyy): ");
 		Date checkOut= sdf.parse(sc.next());
+		
 		if(!checkOut.after(checkIn)) {
 			System.out.println("Erro na reserva: Não é possível realizar checkin apos data de checkout! ");
 		}
@@ -31,18 +32,14 @@ public class Program {
 			System.out.println("Data do check-out ATUALIZADO (dd/MM/yyyy): ");
 			checkOut= sdf.parse(sc.next());
 			
-			Date now = new Date();
-			if (checkIn.before(now) || checkOut.before(now)) {
-				System.out.println("Erro na reserva: Não é possível realizar reserva! ");
+			String error = reserva.attDatas(checkIn, checkOut);
+			if (error != null) {
+				System.out.println("Erro na reserva: " + error);
 			}
-			else if(!checkOut.after(checkIn)) {
-				System.out.println("Erro na reserva: Não é possível realizar checkin apos data de checkout! ");
-			}
-			else {
-				reserva.attDatas(checkIn, checkOut);
+			else{
 				System.out.println("Reserva: " + reserva);
 			}
-		
-	}
+		}
+	sc.close();
 	}
 }
