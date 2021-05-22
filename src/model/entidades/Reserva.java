@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.excessoes.DominioExcessao;
+
 public class Reserva {
 	
 	private Integer numQuarto;
@@ -12,7 +14,10 @@ public class Reserva {
 	
 	private static SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
 	
-	public Reserva(Integer numQuarto, Date checkIn, Date checkOut) {
+	public Reserva(Integer numQuarto, Date checkIn, Date checkOut) throws DominioExcessao {
+		if(!checkOut.after(checkIn)) {
+			throw new DominioExcessao(" Não é possível realizar checkin apos data de checkout! ");
+		}
 		this.numQuarto = numQuarto;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -40,17 +45,16 @@ public class Reserva {
 		return TimeUnit.DAYS.convert(dif, TimeUnit.MILLISECONDS);
 	}
 	
-	public String attDatas(Date checkIn, Date checkOut) {
+	public void attDatas(Date checkIn, Date checkOut) throws DominioExcessao {
 		Date now = new Date();
 		if (checkIn.before(now) || checkOut.before(now)) {
-			return " Não é possível realizar pois devem ser datas futuras! ";
+			throw new DominioExcessao(" Não é possível realizar pois devem ser datas futuras! ");
 		}
 		if(!checkOut.after(checkIn)) {
-			return " Não é possível realizar checkin apos data de checkout! ";
+			throw new DominioExcessao(" Não é possível realizar checkin apos data de checkout! ");
 		}
 		this.checkIn = checkIn;
 		this.checkOut= checkOut;
-		return null;
 	}
 	
 	@Override
